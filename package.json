@@ -1,0 +1,12 @@
+{
+  "name": "js-table",
+  "version": "1.0.0",
+  "description": "javascript table app",
+  "license": "ISC",
+  "author": "Sorokina Olga",
+  "type": "commonjs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
