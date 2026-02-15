@@ -59,12 +59,19 @@ module.exports = {
         ],
       },
       {
-        test: /\.m?js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env']
+            presets: [
+              ["@babel/preset-env", {
+                targets: {
+                  browsers: ["> 0.25%", "not dead"]
+                },
+                modules: "commonjs"
+              }]
+            ]
           }
         }
       }
