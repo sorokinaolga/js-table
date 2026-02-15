@@ -1,4 +1,3 @@
-require('./module');
 require('./scss/index.scss');
 
-console.log('work');
+console.log('Working!')
