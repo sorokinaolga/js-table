@@ -1,3 +1,9 @@
+const { Excel } = require('./components/excel/Excel');
+
 require('./scss/index.scss');
 
-console.log('Working!')
+const excel = new Excel('#app', {
+  components: [],
+});
+
+console.log('Excel', excel);
