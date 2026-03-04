@@ -1,9 +1,11 @@
-import { ExcelComponent } from "../../core/ExcelComponent";
+import { ExcelComponent } from "@core/ExcelComponent";
 import { createTable } from "./table.template";
 import { handlerResize } from "./table.resize";
 import { isCell, shouldResize, matrix, nextSelector } from "./table.functions";
 import { TableSelection } from "./TableSelection";
+import { TABLE_RESIZE } from "../../store/types";
 import {$} from '@core/dom';
+import * as actions from '@/store/actions';
 
 export class Table extends ExcelComponent {
   static className = 'excel__table';
@@ -33,18 +35,23 @@ export class Table extends ExcelComponent {
     this.$on('formula:done', () => {
       this.selection.current.focus();
     });
-    this.$subscribe( state => {
-      console.log('State', state);
-    });
   }
   selectCell($cell) {
     this.selection.select($cell);
     this.$emit('table:select', $cell);
-    this.$dispatch({type: 'test'});
+  }
+  // comment
+  async resizeTable(evt) {
+    try {
+      const data = await handlerResize(this.$root, evt);
+      this.$dispatch(actions.tableResize(data));
+    } catch(e) {
+      console.warn('Resize error', e.message);
+    }
   }
   onMousedown(evt) {
     if(shouldResize(evt)) {
-      handlerResize(this.$root, evt);
+      this.resizeTable(evt);
     } else if(isCell(evt)) {
       const $target = $(evt.target);
       if(evt.shiftKey) {
