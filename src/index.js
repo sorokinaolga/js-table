@@ -9,7 +9,6 @@ import { storage } from './core/utils';
 
 require('./scss/index.scss');
 
-// comment
 const store = createStore(rootReducer, storage('table-state'));
 
 store.subscribe(state => {

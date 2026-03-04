@@ -3,7 +3,6 @@ import { createTable } from "./table.template";
 import { handlerResize } from "./table.resize";
 import { isCell, shouldResize, matrix, nextSelector } from "./table.functions";
 import { TableSelection } from "./TableSelection";
-import { TABLE_RESIZE } from "../../store/types";
 import {$} from '@core/dom';
 import * as actions from '@/store/actions';
 
@@ -36,12 +35,10 @@ export class Table extends ExcelComponent {
       this.selection.current.focus();
     });
   }
-  // comment
   selectCell($cell) {
     this.selection.select($cell);
     this.$emit('table:select', $cell);
   }
-  // comment
   async resizeTable(evt) {
     try {
       const data = await handlerResize(this.$root, evt);
