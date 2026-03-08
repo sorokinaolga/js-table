@@ -18,7 +18,7 @@ export class Table extends ExcelComponent {
   }
   
   toHTML() {
-    return createTable();
+    return createTable(20, this.store.getState());
   }
   prepare() {
     this.selection = new TableSelection();
@@ -30,6 +30,7 @@ export class Table extends ExcelComponent {
 
     this.$on('formula:input', text => {
       this.selection.current.text(text);
+      this.updateTextInStore(text);
     });
     this.$on('formula:done', () => {
       this.selection.current.focus();
@@ -71,7 +72,15 @@ export class Table extends ExcelComponent {
       this.selectCell($next);
     }
   }
+  updateTextInStore(value) {
+    this.$dispatch(
+      actions.changeText({
+        id: this.selection.current.id(),
+        value,
+      }),
+    );
+  }
   onInput(evt) {
-    this.$emit('table:input', $(evt.target));
+    this.updateTextInStore($(evt.target).text())
   }
 }
