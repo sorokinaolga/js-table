@@ -40,8 +40,12 @@ export class Table extends ExcelComponent {
       this.selection.current.focus()
     })
 
-    this.$on('toolbar:applayStyle', style => {
-      this.selection.applyStyle(style)
+    this.$on('toolbar:applayStyle', value => {
+      this.selection.applyStyle(value)
+      this.$dispatch(actions.applyStyle({
+        value,
+        ids: this.selection.selectedIds
+      }))
     })
   }
 
