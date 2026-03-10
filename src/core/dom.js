@@ -1,24 +1,25 @@
 class Dom {
   constructor(selector) {
-    this.$el = typeof selector === 'string' 
-      ? document.querySelector(selector)
-      : selector;
+    this.$el =
+      typeof selector === 'string'
+        ? document.querySelector(selector)
+        : selector;
   }
 
   html(html) {
-    if(typeof html === 'string') {
+    if (typeof html === 'string') {
       this.$el.innerHTML = html;
       return this;
     }
     return this.$el.outerHTML.trim();
   }
 
-  text(content) {
-    if(typeof content === 'string') {
-      this.$el.textContent = content;
+  text(text) {
+    if (typeof text !== 'undefined') {
+      this.$el.textContent = text;
       return this;
     }
-    if(this.$el.tagName.toLowerCase() === 'input') {
+    if (this.$el.tagName.toLowerCase() === 'input') {
       return this.$el.value.trim();
     }
     return this.$el.textContent.trim();
@@ -37,11 +38,16 @@ class Dom {
     this.$el.removeEventListener(eventType, callback);
   }
 
+  find(selector) {
+    return $(this.$el.querySelector(selector));
+  }
+
   append(node) {
-    if(node instanceof Dom) {
+    if (node instanceof Dom) {
       node = node.$el;
     }
-    if(Element.prototype.append) {
+
+    if (Element.prototype.append) {
       this.$el.append(node);
     } else {
       this.$el.appendChild(node);
@@ -62,36 +68,30 @@ class Dom {
     return this.$el.getBoundingClientRect();
   }
 
-  find(selector) {
-    return $(this.$el.querySelector(selector));
-  }
-
-  findAllElements(selector) {
+  findAll(selector) {
     return this.$el.querySelectorAll(selector);
   }
 
   css(styles = {}) {
-    Object.keys(styles).forEach(key => {
+    Object.keys(styles).forEach((key) => {
       this.$el.style[key] = styles[key];
-    })
+    });
   }
 
-  addClass(className) {
-    this.$el.classList.add(className);
-    return this;
-  }
-  removeClass(className) {
-    this.$el.classList.remove(className);
-    return this;
+  getStyles(styles = []) {
+    return styles.reduce((res, s) => {
+      res[s] = this.$el.style[s];
+      return res;
+    }, {});
   }
 
-  id(parse) { 
-    if(parse) {
+  id(parse) {
+    if (parse) {
       const parsed = this.id().split(':');
       return {
         row: +parsed[0],
         col: +parsed[1],
-      }
+      };
     }
     return this.data.id;
   }
@@ -100,18 +100,34 @@ class Dom {
     this.$el.focus();
     return this;
   }
+
+  attr(name, value) {
+    if (value) {
+      this.$el.setAttribute(name, value);
+      return this;
+    }
+    return this.$el.getAttribute(name);
+  }
+
+  addClass(className) {
+    this.$el.classList.add(className);
+    return this;
+  }
+
+  removeClass(className) {
+    this.$el.classList.remove(className);
+    return this;
+  }
 }
 
-// evt.target
 export function $(selector) {
-  return new Dom(selector);
+  return new Dom(selector)
 }
 
 $.create = (tagName, classes = '') => {
-  const el = document.createElement(tagName);
-  if(classes) {
-    el.classList.add(classes);
+  const el = document.createElement(tagName)
+  if (classes) {
+    el.classList.add(classes)
   }
-
-  return $(el);
+  return $(el)
 }
