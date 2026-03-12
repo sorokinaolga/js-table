@@ -11,7 +11,7 @@ const filename = ext => isDev ? `bundle.${ext}` : `bundle.[hash].${ext}`;
 
 module.exports = {
   context: path.resolve(__dirname, 'src'),
-  mode: 'development',
+  mode: isProd ? 'production' : 'development',
   entry: './index.js',
   output: {
     filename: filename('js'),
