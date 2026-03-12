@@ -6,15 +6,23 @@ import {Table} from '@/components/table/Table'
 import {createStore} from '@core/createStore'
 import {rootReducer} from '@/store/rootReducer'
 import {storage, debounce} from '@core/utils'
-import {initialState} from '@/store/initialState'
+import {normalizeInitialState} from '@/store/initialState'
 import {Page} from '@core/Page'
+
+function storageName(param) {
+  return `table:${param}`
+}
 
 export class ExcelPage extends Page {
   getRoot() {
-    console.log(this.params)
+    const params = this.params ? this.params : Date.now().toString()
+
+    const state = storage(storageName(params));
+    const initialState =  normalizeInitialState(state)
     const store = createStore(rootReducer, initialState);
+
     const stateListener = debounce((state) => {
-      storage('table-state', state)
+      storage(storageName(params), state)
     }, 300)
     store.subscribe(stateListener)
     this.excel = new Excel({
