@@ -11,25 +11,33 @@ export class Router {
     this.$placeholder = $(selector)
     this.routes = routes
 
-      this.changePageHandler = this.changePageHandler.bind(this)
+    this.page = null
+
+    this.changePageHandler = this.changePageHandler.bind(this)
 
     this.init()
   }
 
   init() {
-    window.addEventListener('hashchage', this.changePageHandler)
+    window.addEventListener('hashchange', this.changePageHandler)
     this.changePageHandler()
   }
 
   changePageHandler() {
-    const Page = this.routes.excel
-    const page = new Page()
-    this.$placeholder.append(page.getRoot())
+    if(this.page) {
+      this.page.destroy()
+    }
 
-    page.afterRender()
+    this.$placeholder.clear()
+
+    const Page = ActiveRoute.path.includes('excel') ? this.routes.excel : this.routes.dashboard
+    this.page = new Page(ActiveRoute.param);
+
+    this.$placeholder.append(this.page.getRoot())
+    this.page.afterRender()
   }
 
   destroy() {
-    window.removeEventListener('hashchage', this.changePageHandler)
+    window.removeEventListener('hashchange', this.changePageHandler)
   }
 }

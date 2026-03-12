@@ -1,5 +1,5 @@
 export class Page {
-  construcctor(params) {
+  constructor(params) {
     this.params = params
   }
 

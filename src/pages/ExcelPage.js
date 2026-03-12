@@ -11,6 +11,7 @@ import {Page} from '@core/Page'
 
 export class ExcelPage extends Page {
   getRoot() {
+    console.log(this.params)
     const store = createStore(rootReducer, initialState);
     const stateListener = debounce((state) => {
       storage('table-state', state)
